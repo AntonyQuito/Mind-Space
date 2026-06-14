@@ -8,11 +8,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../css/style.css" />
-
-  </head>
+</head>
 <body>
+
   <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-<label for="nav-toggle" class="nav-toggle-btn">☰</label>
+  <label for="nav-toggle" class="nav-toggle-btn">☰</label>
 
   <div class="app-body">
     <aside class="sidebar">
@@ -24,37 +24,40 @@
       <div class="sidebar-foot"><a class="nav-link" href="../../index.html" id="cerrar">Cerrar sesión</a></div>
     </aside>
 
-          <div class="layout">
-    <header class="topbar">
-      <span class="crumb">Panel profesional</span>
-      <span class="user">Dr. Roberto Sánchez <span class="avatar">R</span></span>
-    </header>
+    <div class="layout">
+      <header class="topbar">
+        <span class="crumb">Panel profesional</span>
+        <span class="user">Dr. Roberto Sánchez <span class="avatar">R</span></span>
+      </header>
 
-        <main>
- <section class="tab-panel active" data-panel="pacientes">
-   <div class="page-head"><h1 class="page-title">Mis pacientes</h1><p class="page-subtitle">Pacientes vinculados y su estado de estabilidad.</p></div>
+      <main>
+        <!-- EP06 · Pacientes -->
+        <section class="tab-panel active" data-panel="pacientes">
+          <div class="page-head"><h1 class="page-title">Mis pacientes</h1><p class="page-subtitle">Pacientes vinculados y su estado de estabilidad.</p></div>
 
-   <div id="vista-lista">
-     <input class="filtro" id="buscar-paciente" placeholder="Buscar paciente por nombre..." autocomplete="off" />
-     <div class="tabla-wrap" style="margin-top:14px">
-       <table id="tabla-pacientes">
-         <thead><tr><th>Paciente</th><th>Última sesión</th><th>Bienestar</th><th>Estado</th></tr></thead>
-         <tbody></tbody>
-       </table>
-     </div>
-   </div>
+          <div id="vista-lista">
+            <input class="filtro" id="buscar-paciente" placeholder="Buscar paciente por nombre..." autocomplete="off" />
+            <div class="tabla-wrap" style="margin-top:14px">
+              <table id="tabla-pacientes">
+                <thead><tr><th>Paciente</th><th>Última sesión</th><th>Bienestar</th><th>Estado</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
 
-        <div id="vista-detalle" hidden>
-   <button class="btn btn-secundario" id="volver" style="margin-bottom:16px">← Volver a mis pacientes</button>
-       <div class="panel" id="detalle"></div>
-  </div>
-</section>
-  <section class="tab-panel" data-panel="alertas" id="panel-alertas">
-    <div class="page-head"><h1 class="page-title">Alertas SOS</h1><p class="page-subtitle">Pacientes que requieren atención.</p></div>
-    <p class="form-mensaje" hidden></p>
-    <div id="lista-alertas"></div>
-  </section>
-  main>
+          <div id="vista-detalle" hidden>
+            <button class="btn btn-secundario" id="volver" style="margin-bottom:16px">← Volver a mis pacientes</button>
+            <div class="panel" id="detalle"></div>
+          </div>
+        </section>
+
+        <!-- EP06 · Alertas -->
+        <section class="tab-panel" data-panel="alertas" id="panel-alertas">
+          <div class="page-head"><h1 class="page-title">Alertas SOS</h1><p class="page-subtitle">Pacientes que requieren atención.</p></div>
+          <p class="form-mensaje" hidden></p>
+          <div id="lista-alertas"></div>
+        </section>
+      </main>
 
       <footer>MindSpace · Proyecto académico</footer>
     </div>
