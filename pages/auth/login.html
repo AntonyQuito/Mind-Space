@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión · MindSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body class="auth-body">
+
+  <div class="auth-card">
+    <a class="auth-back" href="../../index.html">← Volver al inicio</a>
+    <div class="auth-logo">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" fill="#2F55E7" opacity="0.10"/>
+        <g transform="translate(12,10)">
+          <path d="M8 4C6 4 4 5.5 4 8C4 9 4.5 10 5 10.5C4.5 11 4 12 4 13C4 15 5.5 16.5 7 17C7 18.5 8 20 10 20.5" stroke="#2F55E7" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M16 4C18 4 20 5.5 20 8C20 9 19.5 10 19 10.5C19.5 11 20 12 20 13C20 15 18.5 16.5 17 17C17 18.5 16 20 14 20.5" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M12 14C12 14 10 12.5 10 11C10 10 10.5 9.5 11 9.5C11.5 9.5 12 10 12 10C12 10 12.5 9.5 13 9.5C13.5 9.5 14 10 14 11C14 12.5 12 14 12 14Z" fill="#FB7185"/>
+          <circle cx="8" cy="8" r="1.5" fill="#2F55E7"/><circle cx="16" cy="8" r="1.5" fill="#FB7185"/><circle cx="12" cy="18" r="1.5" fill="#10B981"/>
+        </g>
+      </svg>
+      <span class="logo-text">Mind<span>Space</span></span>
+    </div>
+    <h2>Bienvenido de nuevo</h2>
+    <p class="subtitulo">Inicia sesión para continuar</p>
+    <form>
+      <p class="form-mensaje" hidden></p>
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" placeholder="tu@email.com" />
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••" />
+      <div class="form-actions"><button class="btn" type="submit">Ingresar</button></div>
+    </form>
+    <p class="form-foot"><a href="recuperar.html">¿Olvidaste tu contraseña?</a></p>
+    <div class="divider-text"><span>¿No tienes cuenta?</span></div>
+    <a class="btn btn-secundario btn-block" href="registro.html">Crear cuenta gratis</a>
+  </div>
+
+  <script src="../../js/shared/storage.js"></script>
+  <script src="../../js/shared/validation.js"></script>
+  <script src="../../js/shared/ui.js"></script>
+  <script src="../../js/auth/login.js"></script>
+</body>
+</html>
