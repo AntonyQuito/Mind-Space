@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel profesional · MindSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+
+  </head>
+<body>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+<label for="nav-toggle" class="nav-toggle-btn">☰</label>
+
+  <div class="app-body">
+    <aside class="sidebar">
+      <div class="brand"><svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#2F55E7" opacity="0.10"/><g transform="translate(12,10)"><path d="M8 4C6 4 4 5.5 4 8C4 9 4.5 10 5 10.5C4.5 11 4 12 4 13C4 15 5.5 16.5 7 17C7 18.5 8 20 10 20.5" stroke="#2F55E7" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M16 4C18 4 20 5.5 20 8C20 9 19.5 10 19 10.5C19.5 11 20 12 20 13C20 15 18.5 16.5 17 17C17 18.5 16 20 14 20.5" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="8" cy="8" r="1.5" fill="#2F55E7"/><circle cx="16" cy="8" r="1.5" fill="#FB7185"/><circle cx="12" cy="18" r="1.5" fill="#10B981"/></g></svg>Mind<span>Space</span></div>
+      <nav>
+        <button class="nav-link active" data-tab="pacientes">Mis pacientes</button>
+        <button class="nav-link" data-tab="alertas">Alertas SOS</button>
+      </nav>
+      <div class="sidebar-foot"><a class="nav-link" href="../../index.html" id="cerrar">Cerrar sesión</a></div>
+    </aside>
+
+          <div class="layout">
+    <header class="topbar">
+      <span class="crumb">Panel profesional</span>
+      <span class="user">Dr. Roberto Sánchez <span class="avatar">R</span></span>
+    </header>
+
+        <main>
+ <section class="tab-panel active" data-panel="pacientes">
+   <div class="page-head"><h1 class="page-title">Mis pacientes</h1><p class="page-subtitle">Pacientes vinculados y su estado de estabilidad.</p></div>
+
+   <div id="vista-lista">
+     <input class="filtro" id="buscar-paciente" placeholder="Buscar paciente por nombre..." autocomplete="off" />
+     <div class="tabla-wrap" style="margin-top:14px">
+       <table id="tabla-pacientes">
+         <thead><tr><th>Paciente</th><th>Última sesión</th><th>Bienestar</th><th>Estado</th></tr></thead>
+         <tbody></tbody>
+       </table>
+     </div>
+   </div>
+
+        <div id="vista-detalle" hidden>
+   <button class="btn btn-secundario" id="volver" style="margin-bottom:16px">← Volver a mis pacientes</button>
+       <div class="panel" id="detalle"></div>
+  </div>
+</section>
+  <section class="tab-panel" data-panel="alertas" id="panel-alertas">
+    <div class="page-head"><h1 class="page-title">Alertas SOS</h1><p class="page-subtitle">Pacientes que requieren atención.</p></div>
+    <p class="form-mensaje" hidden></p>
+    <div id="lista-alertas"></div>
+  </section>
+  main>
+
+      <footer>MindSpace · Proyecto académico</footer>
+    </div>
+  </div>
+
+  <script src="../../js/shared/storage.js"></script>
+  <script src="../../js/shared/ui.js"></script>
+  <script src="../../js/profesional/profesional.js"></script>
+</body>
+</html>
