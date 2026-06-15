@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi panel · MindSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body>
+
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-btn">☰</label>
+
+  <div class="app-body">
+    <aside class="sidebar">
+      <div class="brand"><svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#2F55E7" opacity="0.10"/><g transform="translate(12,10)"><path d="M8 4C6 4 4 5.5 4 8C4 9 4.5 10 5 10.5C4.5 11 4 12 4 13C4 15 5.5 16.5 7 17C7 18.5 8 20 10 20.5" stroke="#2F55E7" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M16 4C18 4 20 5.5 20 8C20 9 19.5 10 19 10.5C19.5 11 20 12 20 13C20 15 18.5 16.5 17 17C17 18.5 16 20 14 20.5" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="8" cy="8" r="1.5" fill="#2F55E7"/><circle cx="16" cy="8" r="1.5" fill="#FB7185"/><circle cx="12" cy="18" r="1.5" fill="#10B981"/></g></svg>Mind<span>Space</span></div>
+      <nav>
+        <button class="nav-link active" data-tab="diario">Diario emocional</button>
+        <button class="nav-link" data-tab="contencion">Contención / SOS</button>
+        <button class="nav-link" data-tab="buscar">Buscar psicólogo</button>
+        <button class="nav-link" data-tab="citas">Mis citas</button>
+        <button class="nav-link" data-tab="privacidad">Privacidad</button>
+      </nav>
+      <div class="sidebar-foot"><a class="nav-link" href="../../index.html" id="cerrar">Cerrar sesión</a></div>
+    </aside>
+
+    <div class="layout">
+      <header class="topbar">
+        <span class="crumb">Panel del paciente</span>
+        <span class="user">María González <span class="avatar">M</span></span>
+      </header>
+
+      <main>
+        <!-- EP02 · Diario -->
+        <section class="tab-panel active" data-panel="diario">
+          <div class="page-head"><h1 class="page-title">Diario emocional</h1><p class="page-subtitle">Registra cómo te sientes y revisa tu historial.</p></div>
+
+          <div class="panel" id="panel-emocion">
+            <h2 class="panel-title">¿Cómo te sientes hoy?</h2>
+            <p class="form-mensaje" hidden></p>
+            <div class="emociones" id="emociones"></div>
+            <label>Intensidad (1 a 5)</label>
+            <div class="intensidad" id="intensidad">
+              <button type="button">1</button><button type="button">2</button><button type="button" class="sel">3</button><button type="button">4</button><button type="button">5</button>
+            </div>
+            <button class="btn" id="guardar-emocion" style="margin-top:16px">Guardar registro</button>
+          </div>
+
+          <div class="panel" id="panel-texto">
+            <h2 class="panel-title">Escritura libre</h2>
+            <p class="panel-subtitle">Tu borrador se conserva si cierras la pestaña.</p>
+            <p class="form-mensaje" hidden></p>
+            <textarea id="texto-libre" placeholder="Hoy me siento..."></textarea>
+            <button class="btn" id="guardar-texto" style="margin-top:12px">Guardar entrada</button>
+          </div>
+
+          <div class="panel" id="panel-voz">
+            <h2 class="panel-title">Nota de voz</h2>
+            <p class="panel-subtitle">Registra tus emociones hablando, sin teclear.</p>
+            <p class="form-mensaje" hidden></p>
+            <button class="btn btn-secundario" id="grabar-voz">🎙️ Grabar nota de voz</button>
+          </div>
+
+          <div class="panel">
+            <h2 class="panel-title">Historial</h2>
+            <div class="fecha-filtros">
+              <div><label>Desde</label><input type="date" id="desde" /></div>
+              <div><label>Hasta</label><input type="date" id="hasta" /></div>
+              <button class="btn btn-secundario" id="filtrar">Filtrar</button>
+            </div>
+            <div id="historial"></div>
+          </div>
+        </section>
+
+        <!-- EP03 · Contención -->
+        <section class="tab-panel" data-panel="contencion" id="panel-contencion">
+          <div class="page-head"><h1 class="page-title">Contención inmediata</h1><p class="page-subtitle">Recupera la calma en el momento.</p></div>
+          <p class="form-mensaje" hidden></p>
+          <div class="grid-2">
+            <div class="panel">
+              <h2 class="panel-title">Respiración 4-7-8</h2>
+              <p class="panel-subtitle">Inhala 4s, retén 7s y exhala 8s, durante 4 ciclos.</p>
+              <div class="breath" id="breath">Listo</div>
+              <div class="breath-controls">
+                <button class="btn" id="breath-iniciar">Iniciar</button>
+                <button class="btn btn-secundario" id="breath-pausar" hidden>Pausar</button>
+              </div>
+            </div>
+            <div class="panel">
+              <h2 class="panel-title">Tips de contención</h2>
+              <button class="btn btn-secundario" id="ver-tips">Ver tips</button>
+              <ul class="tips" id="tips" hidden></ul>
+              <button class="btn btn-coral btn-block" data-sos style="margin-top:14px">Necesito hablar con alguien</button>
+            </div>
+          </div>
+          <div class="panel"><strong>Línea 113 — MINSA.</strong> <span class="muted">Atención psicológica gratuita 24/7. Usa el botón SOS o llama al 113.</span></div>
+        </section>
+
+        <!-- EP04 · Buscar -->
+        <section class="tab-panel" data-panel="buscar">
+          <div class="page-head"><h1 class="page-title">Encuentra tu psicólogo</h1><p class="page-subtitle">Te sugerimos profesionales según tus preferencias.</p></div>
+
+          <div class="panel" id="panel-prefs">
+            <h2 class="panel-title">Tus preferencias</h2>
+            <p class="form-mensaje" hidden></p>
+            <div class="form-grid">
+              <div><label>Presupuesto por sesión (S/)</label>
+                <select id="pref-presupuesto"><option value="">Selecciona...</option><option>100</option><option>130</option><option>160</option></select></div>
+              <div><label>Motivo de consulta</label>
+                <select id="pref-motivo"><option value="">Sin preferencia</option><option>Ansiedad</option><option>Depresión</option><option>Autoestima</option><option>Estrés laboral</option><option>Relaciones</option><option>Duelo</option></select></div>
+            </div>
+            <button class="btn" id="buscar" style="margin-top:14px">Buscar</button>
+          </div>
+
+          <div id="resultados" hidden>
+            <div class="filtros">
+              <select id="filtro-esp"><option value="">Toda especialidad</option><option>Ansiedad</option><option>Duelo</option><option>Autoestima</option><option>Estrés laboral</option><option>Relaciones</option></select>
+              <select id="filtro-mod"><option value="">Toda modalidad</option><option>Virtual</option><option>Presencial</option></select>
+            </div>
+            <div class="psi-grid" id="lista-psi"></div>
+            <p class="muted" id="sin-psi" hidden>No hay coincidencias. Ajusta tus preferencias.</p>
+          </div>
+
+          <div class="panel" id="detalle-psi" hidden style="margin-top:18px"></div>
+        </section>
+
+        <!-- EP05 · Citas -->
+        <section class="tab-panel" data-panel="citas" id="panel-citas">
+          <div class="page-head"><h1 class="page-title">Mis citas</h1><p class="page-subtitle">Tus próximas sesiones.</p></div>
+          <p class="form-mensaje" hidden></p>
+          <div class="tabla-wrap" id="citas-tabla">
+            <table>
+              <thead><tr><th>Fecha</th><th>Hora</th><th>Psicólogo</th><th>Modalidad</th><th>Acciones</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <p class="muted" id="sin-citas" hidden>No tienes citas próximas. Agéndalas desde "Buscar psicólogo".</p>
+        </section>
+
+        <!-- EP05 · Privacidad -->
+        <section class="tab-panel" data-panel="privacidad" id="panel-privacidad">
+          <div class="page-head"><h1 class="page-title">Privacidad</h1><p class="page-subtitle">Controla qué información puede ver tu psicólogo.</p></div>
+          <div class="panel">
+            <p class="form-mensaje" hidden></p>
+            <label class="priv"><input type="checkbox" class="priv-mod" checked /><span class="priv-txt"><strong>Diario emocional</strong><span>Tus registros y emociones.</span></span></label>
+            <label class="priv"><input type="checkbox" class="priv-mod" checked /><span class="priv-txt"><strong>Hábitos y rutinas</strong><span>Sueño, ejercicio y actividades.</span></span></label>
+            <label class="priv"><input type="checkbox" class="priv-mod" /><span class="priv-txt"><strong>Notas de voz</strong><span>Grabaciones de tu diario.</span></span></label>
+            <label class="priv"><input type="checkbox" id="ocultar-todo" /><span class="priv-txt"><strong>Ocultar toda mi información</strong><span>Bloquea el acceso del psicólogo a tus datos.</span></span></label>
+            <button class="btn" id="guardar-privacidad" style="margin-top:16px">Guardar cambios</button>
+          </div>
+        </section>
+      </main>
+
+      <footer>MindSpace · Proyecto académico</footer>
+    </div>
+  </div>
+
+  <button class="sos" data-sos title="SOS Línea 113">SOS</button>
+
+  <!-- Pop-up de confirmación SOS -->
+  <div class="modal-overlay" id="modal-sos" hidden>
+    <div class="modal-card">
+      <div class="modal-ico">☎️</div>
+      <h3>Llamar a la Línea 113</h3>
+      <p>Línea de atención psicológica del MINSA, gratuita y confidencial, disponible las 24 horas. ¿Deseas llamar ahora?</p>
+      <div class="modal-actions">
+        <button class="btn btn-secundario" id="sos-cancelar" type="button">Cancelar</button>
+        <button class="btn btn-coral" id="sos-llamar" type="button">Llamar al 113</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../js/shared/storage.js"></script>
+  <script src="../../js/shared/ui.js"></script>
+  <script src="../../js/paciente/paciente.js"></script>
+</body>
+</html>
