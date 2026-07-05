@@ -127,14 +127,14 @@
         <h3>Profesional Anual</h3>
         <div class="precio">S/39<span> /mes</span></div>
         <ul><li>Todo lo de Freemium</li><li>Pacientes ilimitados</li><li>Panel clínico y patrones</li><li>Alertas y métricas</li></ul>
-        <a class="btn btn-block" href="pages/auth/registro.html?rol=pro">Empezar plan anual</a>
+        <a class="btn btn-block" href="pages/planes/planes.html">Empezar plan anual</a>
       </div>
 
       <div class="plan">
         <h3>Profesional Mensual</h3>
         <div class="precio">S/49<span> /mes</span></div>
         <ul><li>Todo lo de Freemium</li><li>Hasta 50 pacientes</li><li>Panel clínico y patrones</li><li>30 días de prueba</li></ul>
-        <a class="btn btn-secundario btn-block" href="pages/auth/registro.html?rol=pro">Probar 30 días</a>
+        <a class="btn btn-secundario btn-block" href="pages/planes/planes.html">Probar 30 días</a>
       </div>
     </div>
   </section>
@@ -150,6 +150,22 @@
         <details><summary>¿Los profesionales están colegiados?</summary><p>Validamos la colegiatura con el Colegio de Psicólogos del Perú antes de aprobar cada perfil.</p></details>
         <details><summary>¿La Línea 113 está disponible siempre?</summary><p>Sí. El botón SOS te conecta con la Línea 113 del MINSA, gratuita y disponible 24/7.</p></details>
       </div>
+    </div>
+  </section>
+
+   <!-- EP10 · US28: sección de contacto con validación -->
+  <section class="seccion" id="contacto">
+    <h2 class="seccion-titulo">¿Tienes dudas? Escríbenos</h2>
+    <p class="seccion-sub">Te respondemos en menos de 24 horas.</p>
+    <div class="panel contacto-form" id="panel-contacto">
+      <p class="form-mensaje" hidden></p>
+      <label>Nombre</label>
+      <input type="text" id="c-nombre" placeholder="Tu nombre" />
+      <label>Correo</label>
+      <input type="email" id="c-correo" placeholder="tucorreo@ejemplo.com" />
+      <label>Mensaje</label>
+      <textarea id="c-mensaje" placeholder="¿En qué podemos ayudarte?"></textarea>
+      <button class="btn btn-block" id="c-enviar" style="margin-top:14px">Enviar mensaje</button>
     </div>
   </section>
 
@@ -185,5 +201,7 @@
     <div class="footer-bottom">© 2026 MindSpace · Proyecto académico</div>
   </footer>
 
+  <script src="js/shared/ui.js"></script>
+  <script src="js/landing.js"></script>
 </body>
 </html>
