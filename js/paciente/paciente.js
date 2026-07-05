@@ -18,15 +18,35 @@ const PSICOLOGOS = [
 ];
 
 // ------------------------------------------------------------
-// EP02 (US04-US07): registros del diario del paciente
-// EP05 (US14, US16): cita de ejemplo ya agendada
+// EP02 (US04-US07): registros del diario del paciente.
+// Se siembran los últimos 8 días con una emoción por día para que
+// el historial (US07), el gráfico de progreso (US22) y la racha
+// (US23) tengan datos con fechas actuales la primera vez.
+// EP05 (US14, US16): cita de ejemplo ya agendada.
 // ------------------------------------------------------------
-sembrar("registros", [
-  { tipo: "Emoción",   fecha: "2026-05-10", detalle: "Feliz 😊 · intensidad 4/5" },
-  { tipo: "Escritura", fecha: "2026-05-09", detalle: "Hoy logré salir a caminar. Pequeños pasos, pero avanzo." },
-]);
+const fechaHace = (dias) => {
+  const f = new Date();
+  f.setDate(f.getDate() - dias);
+  return f.toISOString().slice(0, 10);
+};
+const EMOCIONES_SEED = [
+  { label: "Feliz", emoji: "😊", int: 4 }, { label: "Tranquilo", emoji: "😌", int: 4 },
+  { label: "Neutral", emoji: "😐", int: 3 }, { label: "Ansioso", emoji: "😰", int: 2 },
+  { label: "Feliz", emoji: "😊", int: 5 }, { label: "Triste", emoji: "😢", int: 2 },
+  { label: "Tranquilo", emoji: "😌", int: 3 }, { label: "Feliz", emoji: "😊", int: 4 },
+];
+sembrar(
+  "registros",
+  EMOCIONES_SEED.map((e, i) => ({
+    tipo: "Emoción",
+    fecha: fechaHace(EMOCIONES_SEED.length - 1 - i), // del más antiguo a hoy
+    detalle: `${e.label} ${e.emoji} · intensidad ${e.int}/5`,
+  })).concat([
+    { tipo: "Escritura", fecha: fechaHace(1), detalle: "Hoy logré salir a caminar. Pequeños pasos, pero avanzo." },
+  ])
+);
 sembrar("citas", [
-  { id: 1, psicologo: "Ana María Rodríguez", fecha: "2026-06-10", hora: "15:00", modalidad: "Virtual" },
+  { id: 1, psicologo: "Ana María Rodríguez", fecha: fechaHace(-7), hora: "15:00", modalidad: "Virtual" },
 ]);
 
 // ------------------------------------------------------------
@@ -479,3 +499,259 @@ document.getElementById("guardar-privacidad").addEventListener("click", () => {
   }
   mostrarMensaje("Preferencias de privacidad guardadas", "exito", panelPrivacidad);
 });
+
+/* ============================================================
+   EP08 - Progreso personal y hábito de uso
+   ============================================================ */
+
+// Extrae la intensidad (1-5) y la etiqueta de emoción desde el
+// texto de un registro de tipo "Emoción". Devuelve null si no aplica.
+function leerEmocion(registro) {
+  if (registro.tipo !== "Emoción") return null;
+  const m = registro.detalle.match(/intensidad\s+(\d)/i);
+  const etiqueta = registro.detalle.split(" ")[0]; // primera palabra = emoción
+  return { etiqueta, intensidad: m ? Number(m[1]) : 3 };
+}
+
+// Dibuja un gráfico de línea simple en SVG a partir de una lista
+// de puntos { fecha, val } (val en escala 1-5). Reutilizado por US22.
+function graficoLinea(puntos) {
+  if (!puntos.length) return "";
+  const ancho = 640, alto = 180, m = 26;
+  const x = (i) => m + (i * (ancho - m * 2)) / Math.max(1, puntos.length - 1);
+  const y = (v) => alto - m - ((v - 1) / 4) * (alto - m * 2); // escala 1..5
+  const linea = puntos.map((p, i) => `${i ? "L" : "M"} ${x(i).toFixed(0)} ${y(p.val).toFixed(0)}`).join(" ");
+  const circulos = puntos.map((p, i) =>
+    `<circle cx="${x(i).toFixed(0)}" cy="${y(p.val).toFixed(0)}" r="4" fill="#2F55E7"></circle>`
+  ).join("");
+  const guias = [2, 3, 4].map((g) =>
+    `<line x1="${m}" y1="${y(g)}" x2="${ancho - m}" y2="${y(g)}" stroke="#E2E8F0" stroke-dasharray="3 4"></line>`
+  ).join("");
+  return `<svg viewBox="0 0 ${ancho} ${alto}">${guias}<path d="${linea}" fill="none" stroke="#2F55E7" stroke-width="2.5"></path>${circulos}</svg>`;
+}
+
+// ------------------------------------------------------------
+// EP08 - US22: ver mi progreso emocional en gráficos.
+// Muestra un gráfico de líneas con la evolución de la intensidad
+// emocional y la emoción predominante. Permite alternar entre
+// vista semanal (7 días) y mensual (30 días). Si hay menos de 7
+// días con registros, indica que se necesitan al menos 7 días.
+// ------------------------------------------------------------
+const panelProgreso = document.getElementById("panel-progreso");
+
+function mostrarProgreso(rango) {
+  const dias = rango === "mensual" ? 30 : 7;
+  const limite = fechaHace(dias - 1);
+
+  // Registros de emoción dentro del rango seleccionado.
+  const emociones = obtener("registros")
+    .filter((r) => r.tipo === "Emoción" && r.fecha >= limite)
+    .sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+  // US22 (escenario de error): se exigen al menos 7 días distintos.
+  const diasDistintos = new Set(emociones.map((r) => r.fecha)).size;
+  if (diasDistintos < 7) {
+    document.getElementById("prog-grafico").innerHTML = "";
+    document.getElementById("prog-predominante").textContent = "";
+    mostrarMensaje("Necesitas al menos 7 días de registros para mostrar tu evolución.", "info", panelProgreso);
+    return;
+  }
+
+  // Construye los puntos del gráfico (intensidad por registro).
+  const puntos = emociones.map((r) => ({ fecha: r.fecha, val: leerEmocion(r).intensidad }));
+  document.getElementById("prog-grafico").innerHTML = graficoLinea(puntos);
+
+  // Calcula la emoción predominante (la etiqueta más frecuente).
+  const conteo = {};
+  emociones.forEach((r) => {
+    const et = leerEmocion(r).etiqueta;
+    conteo[et] = (conteo[et] || 0) + 1;
+  });
+  const predominante = Object.entries(conteo).sort((a, b) => b[1] - a[1])[0][0];
+  document.getElementById("prog-predominante").textContent =
+    `Emoción predominante (${rango}): ${predominante}`;
+
+  // Oculta cualquier mensaje previo de "datos insuficientes".
+  const caja = panelProgreso.querySelector(".form-mensaje");
+  if (caja) caja.hidden = true;
+}
+
+// US22 (escenario alternativo): los botones cambian el rango del gráfico.
+document.getElementById("prog-semanal").addEventListener("click", () => mostrarProgreso("semanal"));
+document.getElementById("prog-mensual").addEventListener("click", () => mostrarProgreso("mensual"));
+
+// ------------------------------------------------------------
+// EP08 - US23: racha de días consecutivos.
+// Cuenta los días seguidos (terminando hoy) con al menos un
+// registro y muestra un mensaje motivador. Si se rompió la racha
+// muestra un mensaje empático y reinicia a 0. La opción "Día de
+// descanso" conserva la racha aunque hoy no se registre nada.
+// ------------------------------------------------------------
+const checkDescanso = document.getElementById("dia-descanso");
+checkDescanso.checked = localStorage.getItem("diaDescanso") === "1";
+checkDescanso.addEventListener("change", () => {
+  localStorage.setItem("diaDescanso", checkDescanso.checked ? "1" : "0");
+  mostrarRacha();
+});
+
+function calcularRacha() {
+  const fechas = new Set(obtener("registros").map((r) => r.fecha));
+  const descanso = localStorage.getItem("diaDescanso") === "1";
+  const iso = (d) => d.toISOString().slice(0, 10);
+
+  let cursor = new Date();
+  // Si hoy no hay registro: con "día de descanso" la racha se conserva
+  // (empezamos a contar desde ayer); sin él, la racha se considera rota.
+  if (!fechas.has(iso(cursor))) {
+    if (descanso) cursor.setDate(cursor.getDate() - 1);
+    else return { dias: 0, rota: true };
+  }
+  let dias = 0;
+  while (fechas.has(iso(cursor))) {
+    dias++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return { dias, rota: false };
+}
+
+function mostrarRacha() {
+  const { dias, rota } = calcularRacha();
+  document.getElementById("racha-num").textContent = dias;
+  const msg = document.getElementById("racha-msg");
+  if (dias === 0 && rota) {
+    // Escenario de error: mensaje empático tras romper la racha.
+    msg.textContent = "No pasa nada, hoy es un buen día para retomar tu hábito 💙";
+  } else if (dias === 0) {
+    msg.textContent = "Registra una emoción para empezar tu racha.";
+  } else {
+    // Escenario exitoso: mensaje motivador.
+    msg.textContent = `¡Llevas ${dias} día${dias === 1 ? "" : "s"} seguidos cuidándote! Sigue así 🌱`;
+  }
+}
+mostrarRacha();
+mostrarProgreso("semanal");
+
+/* ============================================================
+   EP09 - Comunidad anónima
+   ============================================================ */
+
+// Listas para autogenerar alias anónimos (adjetivo + animal).
+const ALIAS_ADJ = ["Sereno", "Valiente", "Tranquilo", "Luminoso", "Paciente", "Amable", "Curioso", "Constante"];
+const ALIAS_ANIMAL = ["Colibrí", "Zorro", "Búho", "Delfín", "Lince", "Nutria", "Gorrión", "Venado"];
+
+// ------------------------------------------------------------
+// EP09 - US24: publicar en la comunidad de forma anónima.
+// Genera (o recupera) un alias, valida el mensaje y publica con
+// tema y alias. Si detecta datos personales (correos o secuencias
+// largas de dígitos como teléfonos) bloquea la publicación.
+// ------------------------------------------------------------
+
+// Genera un alias aleatorio y lo guarda como alias actual.
+function generarAlias() {
+  const a = ALIAS_ADJ[Math.floor(Math.random() * ALIAS_ADJ.length)];
+  const an = ALIAS_ANIMAL[Math.floor(Math.random() * ALIAS_ANIMAL.length)];
+  const alias = `${an} ${a}`;
+  localStorage.setItem("alias", alias);
+  return alias;
+}
+
+// Recupera el alias actual o crea uno la primera vez.
+let aliasActual = localStorage.getItem("alias") || generarAlias();
+document.getElementById("alias").textContent = aliasActual;
+
+// US24 (escenario alternativo): generar un alias nuevo.
+document.getElementById("nuevo-alias").addEventListener("click", () => {
+  aliasActual = generarAlias();
+  document.getElementById("alias").textContent = aliasActual;
+});
+
+// Siembra publicaciones de ejemplo la primera vez.
+sembrar("posts", [
+  { id: 1, alias: "Búho Paciente",   tema: "Ansiedad", texto: "Hoy fue un día difícil, pero respiré y lo logré.", reacciones: 3, fecha: fechaHace(1), reaccionado: false, oculto: false },
+  { id: 2, alias: "Delfín Amable",   tema: "Logros",   texto: "Después de semanas, por fin pedí ayuda. Me siento aliviado.", reacciones: 7, fecha: fechaHace(2), reaccionado: false, oculto: false },
+]);
+
+const panelPublicar = document.getElementById("panel-publicar");
+document.getElementById("publicar").addEventListener("click", () => {
+  const texto = document.getElementById("post-texto").value.trim();
+  const tema  = document.getElementById("post-tema").value;
+
+  // No permite publicar mensajes vacíos.
+  if (!texto) {
+    mostrarMensaje("Escribe un mensaje para publicar", "error", panelPublicar);
+    return;
+  }
+
+  // US24 (escenario de error): detecta datos personales (correos o
+  // números de teléfono) y bloquea la publicación.
+  const tieneCorreo   = /\S+@\S+\.\S+/.test(texto);
+  const tieneTelefono = /\d[\d\s().-]{6,}\d/.test(texto);
+  if (tieneCorreo || tieneTelefono) {
+    mostrarMensaje("Tu mensaje parece incluir datos personales (correo o teléfono). Reformúlalo para mantener tu anonimato.", "error", panelPublicar);
+    return;
+  }
+
+  // Publica con alias autogenerado y refresca el feed.
+  agregar("posts", {
+    id: Date.now(), alias: aliasActual, tema, texto,
+    reacciones: 0, fecha: hoy(), reaccionado: false, oculto: false,
+  });
+  document.getElementById("post-texto").value = "";
+  mostrarMensaje("Tu mensaje se publicó de forma anónima", "exito", panelPublicar);
+  mostrarFeed();
+});
+
+// ------------------------------------------------------------
+// EP09 - US25: reaccionar a publicaciones.
+// "Te entiendo" suma una reacción; si ya reaccionaste, el botón
+// cambia a "Quitar reacción". "Reportar" oculta la publicación
+// de tu feed.
+// ------------------------------------------------------------
+function mostrarFeed() {
+  const posts = obtener("posts")
+    .filter((p) => !p.oculto)
+    .sort((a, b) => b.id - a.id);
+
+  document.getElementById("feed").innerHTML = posts.length
+    ? posts.map((p) => `
+        <div class="post" data-id="${p.id}">
+          <div class="post-cab">
+            <span class="post-alias">${p.alias}</span>
+            <span class="post-tema">${p.tema}</span>
+          </div>
+          <p>${p.texto}</p>
+          <div class="post-acc">
+            <button class="btn btn-secundario ${p.reaccionado ? "reaccionado" : ""}" data-reaccion="${p.id}">
+              ${p.reaccionado ? "Quitar reacción" : "Te entiendo"} · ${p.reacciones}
+            </button>
+            <button class="btn btn-secundario" data-reportar="${p.id}">Reportar</button>
+          </div>
+        </div>`).join("")
+    : `<p class="muted">Aún no hay publicaciones. ¡Sé el primero en compartir!</p>`;
+}
+
+// Delegación de eventos para reaccionar y reportar.
+document.getElementById("feed").addEventListener("click", (evento) => {
+  const idReaccion = evento.target.dataset.reaccion;
+  const idReportar = evento.target.dataset.reportar;
+
+  // US25: alternar reacción "Te entiendo" / "Quitar reacción".
+  if (idReaccion) {
+    const posts = obtener("posts");
+    const post = posts.find((p) => p.id === Number(idReaccion));
+    if (post.reaccionado) { post.reacciones--; post.reaccionado = false; }
+    else { post.reacciones++; post.reaccionado = true; }
+    guardar("posts", posts);
+    mostrarFeed();
+  }
+
+  // US25 (escenario alternativo): reportar oculta la publicación.
+  if (idReportar) {
+    const posts = obtener("posts");
+    const post = posts.find((p) => p.id === Number(idReportar));
+    post.oculto = true;
+    guardar("posts", posts);
+    mostrarFeed();
+  }
+});
+mostrarFeed();
