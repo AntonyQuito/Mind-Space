@@ -311,7 +311,10 @@ footer { padding: 16px 32px; border-top: 1px solid var(--borde); background: #ff
 .grafico svg { width: 100%; height: auto; }
 
 /* ----- SOS flotante ----- */
-.sos { position: fixed; bottom: 24px; right: 24px; z-index: 90; width: 58px; height: 58px; border-radius: 50%; border: none; background: var(--coral); color: #fff; font-weight: 700; cursor: pointer; box-shadow: var(--sombra-md); }
+/* Hallazgo 1: botón SOS ampliado de 58px a 65px (Ley de Fitts y
+   accesibilidad en crisis: un área táctil mayor facilita accionarlo
+   cuando se pierde motricidad fina durante ansiedad o pánico). */
+.sos { position: fixed; bottom: 24px; right: 24px; z-index: 90; width: 65px; height: 65px; border-radius: 50%; border: none; background: var(--coral); color: #fff; font-weight: 700; font-size: 1.02rem; cursor: pointer; box-shadow: var(--sombra-md); }
 .sos:hover { background: #f43f5e; }
 
 /* ----- Boton hamburguesa (movil) ----- */
@@ -346,3 +349,95 @@ footer { padding: 16px 32px; border-top: 1px solid var(--borde); background: #ff
   .landing-menu { gap: 10px; }
   .landing-menu .solo-desktop { display: none; }
 }
+
+/* ============================================================
+   EP07 - Seguimiento y retención (panel profesional)
+   ============================================================ */
+.star { background: none; border: none; cursor: pointer; font-size: 1.15rem; line-height: 1; color: var(--gris); width: auto; padding: 2px 6px; }
+.star.on { color: #f5b50a; }
+.fila-prioritaria { background: #fffdf3; }
+.plantillas { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+
+/* ============================================================
+   EP08 - Progreso personal y racha (panel paciente)
+   ============================================================ */
+.racha { text-align: center; padding: 8px 0; }
+.racha-num { font-size: 2.6rem; font-weight: 700; color: var(--azul); line-height: 1; }
+.racha-msg { color: var(--texto-2); margin-top: 6px; }
+.progreso-filtros { display: flex; gap: 8px; margin-bottom: 14px; }
+
+/* ============================================================
+   EP09 - Comunidad anónima (panel paciente)
+   ============================================================ */
+.alias-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.alias-chip { background: var(--azul-suave); color: var(--azul); font-weight: 600; border-radius: 999px; padding: 5px 12px; font-size: .85rem; }
+.post { border: 1px solid var(--borde); border-radius: var(--radio); padding: 16px 18px; margin-top: 12px; box-shadow: var(--sombra); }
+.post.oculto { display: none; }
+.post-cab { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px; }
+.post-tema { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--azul); background: var(--azul-suave); padding: 2px 9px; border-radius: 999px; }
+.post-alias { font-weight: 600; font-size: .9rem; }
+.post-acc { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.post-acc .btn { padding: 6px 12px; font-size: .82rem; }
+.post-acc .btn.reaccionado { background: var(--ok); border-color: var(--ok); }
+
+/* ============================================================
+   EP10 - Suscripción SaaS y landing (planes, pago, contacto)
+   ============================================================ */
+.plan.actual { outline: 2px solid var(--ok); outline-offset: -2px; }
+.plan-actual-tag { display: inline-block; background: var(--ok); color: #fff; font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+.pago-wrap { max-width: 440px; margin: 0 auto; }
+.contacto-form { max-width: 520px; margin: 0 auto; }
+.planes-page { max-width: 1140px; margin: 0 auto; padding: 40px 24px 64px; }
+.input-error { border-color: #e0414f !important; box-shadow: 0 0 0 3px rgba(224,65,79,.15) !important; }
+
+/* ============================================================
+   EP06 - Panel del profesional: métricas y dashboard enriquecido
+   (relleno visual, sin nuevas user stories)
+   ============================================================ */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 20px; }
+.kpi { background: #fff; border: 1px solid var(--borde); border-radius: var(--radio); padding: 16px 18px; box-shadow: var(--sombra); }
+.kpi-label { font-size: .72rem; text-transform: uppercase; letter-spacing: .5px; color: var(--gris); font-weight: 600; }
+.kpi-num { font-size: 1.9rem; font-weight: 700; color: var(--texto); line-height: 1.1; margin-top: 6px; }
+.kpi-num.ok { color: var(--ok); }
+.kpi-num.warn { color: #d98a00; }
+.kpi-num.bad { color: #e0414f; }
+.kpi-sub { font-size: .78rem; color: var(--texto-2); margin-top: 4px; }
+
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 860px) { .dash-grid { grid-template-columns: 1fr; } }
+
+.barras { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.barra-row { display: grid; grid-template-columns: 96px 1fr 40px; align-items: center; gap: 10px; font-size: .85rem; }
+.barra-track { background: var(--gris-claro); border-radius: 999px; height: 10px; overflow: hidden; }
+.barra-fill { height: 100%; border-radius: 999px; }
+.barra-val { text-align: right; font-weight: 600; color: var(--texto-2); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 16px 0; }
+.stat { background: var(--gris-claro); border-radius: var(--radio-sm); padding: 12px 14px; }
+.stat-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .4px; color: var(--gris); font-weight: 600; }
+.stat-val { font-size: 1.25rem; font-weight: 700; margin-top: 2px; }
+
+.lista-simple { list-style: none; }
+.lista-simple li { display: flex; justify-content: space-between; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--borde); font-size: .9rem; }
+.lista-simple li:last-child { border-bottom: none; }
+.lista-simple .cuando { color: var(--gris); font-size: .82rem; }
+
+.feed-act { display: flex; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--borde); }
+.feed-act:last-child { border-bottom: none; }
+.feed-act .ico { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: var(--azul-suave); flex: none; font-size: .95rem; }
+.feed-act .txt { font-size: .88rem; line-height: 1.4; }
+.feed-act .txt .cuando { color: var(--gris); font-size: .78rem; }
+
+.chips-estado { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+.chip-estado { border: 1px solid var(--borde); background: #fff; border-radius: 999px; padding: 6px 14px; font-size: .85rem; font-weight: 600; color: var(--texto-2); cursor: pointer; }
+.chip-estado.on { background: var(--azul-suave); border-color: var(--azul); color: var(--azul); }
+
+.tendencia { font-weight: 700; }
+.tendencia.sube { color: var(--ok); }
+.tendencia.baja { color: #e0414f; }
+.tendencia.plana { color: var(--gris); }
+
+.mini-nota { background: var(--azul-suave); border-left: 3px solid var(--azul); border-radius: var(--radio-sm); padding: 12px 14px; font-size: .88rem; color: var(--texto-2); margin-top: 12px; }
+.panel-sub-titulo { font-size: .95rem; font-weight: 600; color: var(--texto); margin: 2px 0 4px; }
+.seccion-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.tag-mini { display: inline-block; font-size: .72rem; font-weight: 600; color: var(--texto-2); background: var(--gris-claro); border-radius: 999px; padding: 2px 9px; margin-right: 4px; }

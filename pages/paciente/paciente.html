@@ -23,6 +23,8 @@
         <button class="nav-link" data-tab="buscar">Buscar psicólogo</button>
         <button class="nav-link" data-tab="citas">Mis citas</button>
         <button class="nav-link" data-tab="privacidad">Privacidad</button>
+        <button class="nav-link" data-tab="progreso">Mi progreso</button>
+        <button class="nav-link" data-tab="comunidad">Comunidad</button>
       </nav>
       <div class="sidebar-foot"><a class="nav-link" href="../../index.html" id="cerrar">Cerrar sesión</a></div>
     </aside>
@@ -97,6 +99,7 @@
             </div>
           </div>
           <div class="panel"><strong>Línea 113 — MINSA.</strong> <span class="muted">Atención psicológica gratuita 24/7. Usa el botón SOS o llama al 113.</span></div>
+          <div class="panel mini-nota" style="margin-top:0">Los registros del diario son herramientas de acompañamiento para tus sesiones programadas. Ante una situación de emergencia inmediata que requiera atención al instante, por favor utiliza el botón SOS para conectar con la Línea 113.</div>
         </section>
 
         <!-- EP04 · Buscar -->
@@ -151,6 +154,57 @@
             <label class="priv"><input type="checkbox" id="ocultar-todo" /><span class="priv-txt"><strong>Ocultar toda mi información</strong><span>Bloquea el acceso del psicólogo a tus datos.</span></span></label>
             <button class="btn" id="guardar-privacidad" style="margin-top:16px">Guardar cambios</button>
           </div>
+        </section>
+
+        <!-- EP08 · Mi progreso -->
+        <section class="tab-panel" data-panel="progreso">
+          <div class="page-head"><h1 class="page-title">Mi progreso</h1><p class="page-subtitle">Tu evolución emocional y tu constancia.</p></div>
+
+          <!-- US23: racha de días consecutivos -->
+          <div class="panel" id="panel-racha">
+            <h2 class="panel-title">Racha de constancia</h2>
+            <div class="racha">
+              <div class="racha-num" id="racha-num">0</div>
+              <p class="racha-msg" id="racha-msg"></p>
+            </div>
+            <label class="priv" style="margin-top:6px"><input type="checkbox" id="dia-descanso" /><span class="priv-txt"><strong>Día de descanso</strong><span>No pierdes tu racha si hoy no registras nada.</span></span></label>
+          </div>
+
+          <!-- US22: evolución del bienestar (gráfico) -->
+          <div class="panel" id="panel-progreso">
+            <h2 class="panel-title">Evolución de tu bienestar</h2>
+            <p class="form-mensaje" hidden></p>
+            <div class="progreso-filtros">
+              <button class="btn btn-secundario" id="prog-semanal">Semanal</button>
+              <button class="btn btn-secundario" id="prog-mensual">Mensual</button>
+            </div>
+            <p class="muted" id="prog-predominante"></p>
+            <div class="grafico" id="prog-grafico"></div>
+          </div>
+        </section>
+
+        <!-- EP09 · Comunidad anónima -->
+        <section class="tab-panel" data-panel="comunidad">
+          <div class="page-head"><h1 class="page-title">Comunidad anónima</h1><p class="page-subtitle">Comparte y apoya, siempre de forma anónima.</p></div>
+
+          <!-- US24: publicar de forma anónima -->
+          <div class="panel" id="panel-publicar">
+            <h2 class="panel-title">Publicar</h2>
+            <p class="form-mensaje" hidden></p>
+            <div class="alias-box">
+              <span class="muted">Publicarás como:</span>
+              <span class="alias-chip" id="alias">—</span>
+              <button class="btn btn-secundario" id="nuevo-alias" type="button" style="padding:6px 12px;font-size:.82rem">Generar nuevo alias</button>
+            </div>
+            <label>Tema</label>
+            <select id="post-tema"><option>Ansiedad</option><option>Ánimo</option><option>Relaciones</option><option>Trabajo</option><option>Logros</option></select>
+            <label>Tu mensaje</label>
+            <textarea id="post-texto" placeholder="Comparte cómo te sientes..."></textarea>
+            <button class="btn" id="publicar" style="margin-top:12px">Publicar</button>
+          </div>
+
+          <!-- US25: feed y reacciones -->
+          <div id="feed"></div>
         </section>
       </main>
 

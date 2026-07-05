@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planes de suscripción · MindSpace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/style.css" />
+</head>
+<body class="landing-body">
+
+  <nav class="landing-nav">
+    <a class="brand-logo" href="../../index.html">
+      <svg width="30" height="30" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="24" cy="24" r="22" fill="#2F55E7" opacity="0.10"/>
+        <g transform="translate(12,10)">
+          <path d="M8 4C6 4 4 5.5 4 8C4 9 4.5 10 5 10.5C4.5 11 4 12 4 13C4 15 5.5 16.5 7 17C7 18.5 8 20 10 20.5" stroke="#2F55E7" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <path d="M16 4C18 4 20 5.5 20 8C20 9 19.5 10 19 10.5C19.5 11 20 12 20 13C20 15 18.5 16.5 17 17C17 18.5 16 20 14 20.5" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/>
+          <circle cx="8" cy="8" r="1.5" fill="#2F55E7"/><circle cx="16" cy="8" r="1.5" fill="#FB7185"/><circle cx="12" cy="18" r="1.5" fill="#10B981"/>
+        </g>
+      </svg>
+      <span>Mind<span class="accent">Space</span></span>
+    </a>
+    <div class="landing-menu">
+      <a class="btn btn-secundario" href="../../index.html">← Volver al inicio</a>
+    </div>
+  </nav>
+
+  <main class="planes-page">
+
+    <!-- EP10 · US26: ver planes de suscripción -->
+    <div id="vista-planes">
+      <h1 class="seccion-titulo">Planes de suscripción</h1>
+      <p class="seccion-sub">Elige la membresía que mejor se ajusta a tu práctica.</p>
+      <p class="form-mensaje" hidden></p>
+
+      <div class="plans" id="lista-planes"></div>
+
+      <!-- US26 (escenario de error/extra): comparación completa de beneficios -->
+      <div class="tabla-wrap" id="comparacion" hidden style="margin-top:28px">
+        <table>
+          <thead><tr><th>Beneficio</th><th>Freemium</th><th>Mensual</th><th>Anual</th></tr></thead>
+          <tbody id="comparacion-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EP10 · US27: simular pago de suscripción -->
+    <div id="vista-pago" hidden>
+      <h1 class="seccion-titulo">Pago de suscripción</h1>
+      <p class="seccion-sub" id="pago-sub"></p>
+      <div class="panel pago-wrap">
+        <p class="form-mensaje" hidden></p>
+        <label>Nombre en la tarjeta</label>
+        <input type="text" id="pago-nombre" placeholder="Como aparece en la tarjeta" />
+        <label>Número de tarjeta</label>
+        <input type="text" id="pago-tarjeta" placeholder="16 dígitos" inputmode="numeric" maxlength="19" />
+        <div class="form-grid">
+          <div><label>Vencimiento</label><input type="text" id="pago-venc" placeholder="MM/AA" /></div>
+          <div><label>CVV</label><input type="text" id="pago-cvv" placeholder="123" maxlength="4" /></div>
+        </div>
+        <button class="btn btn-block" id="pago-pagar" style="margin-top:16px">Pagar</button>
+        <button class="btn btn-secundario btn-block" id="pago-volver" style="margin-top:10px">Volver a planes</button>
+      </div>
+    </div>
+
+    <!-- EP10 · US27: confirmación de pago exitoso -->
+    <div id="vista-exito" hidden>
+      <div class="panel pago-wrap" style="text-align:center">
+        <div style="font-size:2.4rem">✅</div>
+        <h1 class="seccion-titulo">¡Pago exitoso!</h1>
+        <p class="seccion-sub" id="exito-sub"></p>
+        <button class="btn btn-block" id="exito-volver" style="margin-top:8px">Volver a planes</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../../js/shared/storage.js"></script>
+  <script src="../../js/shared/ui.js"></script>
+  <script src="../../js/planes/planes.js"></script>
+</body>
+</html>

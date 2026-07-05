@@ -18,8 +18,10 @@
     <aside class="sidebar">
       <div class="brand"><svg width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#2F55E7" opacity="0.10"/><g transform="translate(12,10)"><path d="M8 4C6 4 4 5.5 4 8C4 9 4.5 10 5 10.5C4.5 11 4 12 4 13C4 15 5.5 16.5 7 17C7 18.5 8 20 10 20.5" stroke="#2F55E7" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M16 4C18 4 20 5.5 20 8C20 9 19.5 10 19 10.5C19.5 11 20 12 20 13C20 15 18.5 16.5 17 17C17 18.5 16 20 14 20.5" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="8" cy="8" r="1.5" fill="#2F55E7"/><circle cx="16" cy="8" r="1.5" fill="#FB7185"/><circle cx="12" cy="18" r="1.5" fill="#10B981"/></g></svg>Mind<span>Space</span></div>
       <nav>
-        <button class="nav-link active" data-tab="pacientes">Mis pacientes</button>
+        <button class="nav-link active" data-tab="resumen">Resumen</button>
+        <button class="nav-link" data-tab="pacientes">Mis pacientes</button>
         <button class="nav-link" data-tab="alertas">Alertas SOS</button>
+        <a class="nav-link" href="../planes/planes.html">Planes</a>
       </nav>
       <div class="sidebar-foot"><a class="nav-link" href="../../index.html" id="cerrar">Cerrar sesión</a></div>
     </aside>
@@ -31,18 +33,78 @@
       </header>
 
       <main>
+        <!-- EP06 · Resumen (dashboard de métricas del profesional) -->
+        <section class="tab-panel active" data-panel="resumen">
+          <div class="page-head">
+            <h1 class="page-title">Buenos días, Dr. Sánchez 👋</h1>
+            <p class="page-subtitle">Este es el estado general de tu práctica clínica hoy.</p>
+          </div>
+
+          <!-- Indicadores clave (derivados de US17/US18/US19) -->
+          <div class="kpi-grid" id="kpis"></div>
+
+          <div class="dash-grid">
+            <div class="panel">
+              <div class="seccion-cab"><h2 class="panel-title">Distribución por estado</h2><span class="tag-mini" id="tag-total"></span></div>
+              <p class="muted" style="font-size:.85rem">Cómo se reparten tus pacientes según su nivel de estabilidad.</p>
+              <div class="barras" id="barras-estado"></div>
+              <div class="mini-nota" id="nota-estado"></div>
+            </div>
+
+            <div class="panel">
+              <div class="seccion-cab"><h2 class="panel-title">Bienestar promedio del panel</h2><span class="tag-mini">Últimos 30 días</span></div>
+              <p class="muted" style="font-size:.85rem">Promedio agregado del bienestar de todos tus pacientes.</p>
+              <div class="grafico" id="grafico-agregado"></div>
+              <p class="muted" id="tendencia-global" style="margin-top:8px"></p>
+            </div>
+          </div>
+
+          <div class="dash-grid" style="margin-top:18px">
+            <div class="panel">
+              <h2 class="panel-title">Agenda de hoy</h2>
+              <p class="muted" style="font-size:.85rem">Tus próximas sesiones programadas.</p>
+              <ul class="lista-simple" id="agenda-hoy"></ul>
+            </div>
+
+            <div class="panel">
+              <h2 class="panel-title">Actividad reciente</h2>
+              <p class="muted" style="font-size:.85rem">Últimos movimientos de tus pacientes.</p>
+              <div id="actividad"></div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:18px">
+            <h2 class="panel-title">Alcance de la herramienta</h2>
+            <p class="muted">Los registros del diario son herramientas de acompañamiento para tus sesiones programadas. Ante una situación de emergencia inmediata que requiera atención al instante, por favor utiliza el botón SOS para conectar con la Línea 113.</p>
+            <p class="muted" style="margin-top:8px">MindSpace no es un servicio de monitoreo activo ni de respuesta médica en tiempo real: el estado que ves (incluido "Crisis") es un insumo de apoyo para optimizar tus sesiones, no una vigilancia constante del paciente fuera del horario de consulta.</p>
+          </div>
+        </section>
+
         <!-- EP06 · Pacientes -->
-        <section class="tab-panel active" data-panel="pacientes">
-          <div class="page-head"><h1 class="page-title">Mis pacientes</h1><p class="page-subtitle">Pacientes vinculados y su estado de estabilidad.</p></div>
+        <section class="tab-panel" data-panel="pacientes">
+          <div class="page-head"><h1 class="page-title">Mis pacientes</h1><p class="page-subtitle">Pacientes vinculados, su adherencia y su estado de estabilidad.</p></div>
 
           <div id="vista-lista">
+            <!-- Mini-métricas de la cartera de pacientes -->
+            <div class="kpi-grid" id="kpis-pacientes"></div>
+
             <input class="filtro" id="buscar-paciente" placeholder="Buscar paciente por nombre..." autocomplete="off" />
-            <div class="tabla-wrap" style="margin-top:14px">
+
+            <!-- Filtro por estado (US17: visión organizada) -->
+            <div class="chips-estado" id="chips-estado">
+              <span class="chip-estado on" data-estado="todos">Todos</span>
+              <span class="chip-estado" data-estado="estable">Estables</span>
+              <span class="chip-estado" data-estado="atencion">En atención</span>
+              <span class="chip-estado" data-estado="crisis">En crisis</span>
+            </div>
+
+            <div class="tabla-wrap" style="margin-top:6px">
               <table id="tabla-pacientes">
-                <thead><tr><th>Paciente</th><th>Última sesión</th><th>Bienestar</th><th>Estado</th></tr></thead>
+                <thead><tr><th></th><th>Paciente</th><th>Motivo</th><th>Última sesión</th><th>Bienestar</th><th>Adherencia</th><th>Próxima cita</th><th>Estado</th></tr></thead>
                 <tbody></tbody>
               </table>
             </div>
+            <p class="muted" id="sin-pacientes" hidden style="margin-top:12px">No hay pacientes que coincidan con el filtro.</p>
           </div>
 
           <div id="vista-detalle" hidden>
@@ -53,8 +115,16 @@
 
         <!-- EP06 · Alertas -->
         <section class="tab-panel" data-panel="alertas" id="panel-alertas">
-          <div class="page-head"><h1 class="page-title">Alertas SOS</h1><p class="page-subtitle">Pacientes que requieren atención.</p></div>
+          <div class="page-head"><h1 class="page-title">Alertas SOS</h1><p class="page-subtitle">Pacientes que requieren atención prioritaria.</p></div>
           <p class="form-mensaje" hidden></p>
+
+          <!-- Resumen de alertas -->
+          <div class="kpi-grid" id="kpis-alertas"></div>
+
+          <div class="panel" style="margin-bottom:16px">
+            <p class="muted" style="margin:0">Las alertas se generan automáticamente cuando un paciente registra emociones muy intensas, usa el botón SOS o deja de registrar por varios días. Atiende primero las marcadas como <strong style="color:#e0414f">urgentes</strong>.</p>
+          </div>
+
           <div id="lista-alertas"></div>
         </section>
       </main>
