@@ -28,11 +28,8 @@ const sembrar = (clave, lista) => {
   if (obtener(clave).length === 0) guardar(clave, lista);
 };
 
-// Sesión: guarda el email del usuario activo como valor único.
-const guardarSesion = (email) => localStorage.setItem("usuarioActivo", email);
-const obtenerSesion = () => localStorage.getItem("usuarioActivo");
-// EP01 - US03: cerrar sesión limpia el usuario activo.
-const cerrarSesion = () => {
-  localStorage.removeItem("usuarioActivo");
+// EP01 - US03: cerrar sesión (Supabase Auth) y volver al inicio.
+const cerrarSesion = async () => {
+  await db.auth.signOut();
   window.location.href = "../../index.html";
 };
