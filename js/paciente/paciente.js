@@ -45,15 +45,30 @@ sembrar(
     { tipo: "Escritura", fecha: fechaHace(1), detalle: "Hoy logré salir a caminar. Pequeños pasos, pero avanzo." },
   ])
 );
-sembrar("citas", [
-  { id: 1, psicologo: "Ana María Rodríguez", fecha: fechaHace(-7), hora: "15:00", modalidad: "Virtual" },
-]);
+// Las citas ahora viven en Supabase (tabla "citas"), ya no se siembran en localStorage.
 
 // ------------------------------------------------------------
 // EP01 - US03: cerrar sesión
 //Limpia la sesión activa y vuelve al inicio
 // ------------------------------------------------------------
 document.getElementById("cerrar").addEventListener("click", cerrarSesion);
+
+// ------------------------------------------------------------
+// Guard de sesión (Supabase): si no hay usuario logueado,
+// vuelve al login. Guarda el usuario activo en "usuarioActual"
+// para usarlo al crear, listar y cancelar citas.
+// ------------------------------------------------------------
+let usuarioActual = null;
+
+(async () => {
+  const { data: { user } } = await db.auth.getUser();
+  if (!user) {
+    window.location.href = "../auth/login.html";
+    return;
+  }
+  usuarioActual = user;
+  mostrarCitas(); // ahora sí, carga las citas del paciente desde Supabase
+})();
 
 // ------------------------------------------------------------
 //Navegación por pestañas del menú lateral
@@ -398,15 +413,21 @@ function verPerfil(id) {
   detalle.hidden = false;
   detalle.scrollIntoView({ behavior: "smooth" });
 
-  // US14: guarda la cita en localStorage y notifica al paciente.
-  document.getElementById("confirmar-cita").addEventListener("click", () => {
-    agregar("citas", {
-      id:        Date.now(),
-      psicologo: p.nombre,
-      fecha:     document.getElementById("cita-fecha").value,
-      hora:      document.getElementById("cita-hora").value,
-      modalidad: p.mod,
+  // US14: guarda la cita en Supabase y notifica al paciente.
+  document.getElementById("confirmar-cita").addEventListener("click", async () => {
+    const { error } = await db.from("citas").insert({
+      paciente_id: usuarioActual.id,
+      psicologo:   p.nombre,
+      fecha:       document.getElementById("cita-fecha").value,
+      hora:        document.getElementById("cita-hora").value,
+      modalidad:   p.mod,
     });
+
+    if (error) {
+      mostrarMensaje("No se pudo agendar la cita: " + error.message, "error", detalle);
+      return;
+    }
+
     mostrarMensaje('Cita agendada con éxito. La verás en "Mis citas".', "exito", detalle);
     mostrarCitas(); // refresca la pestaña de citas
   });
@@ -418,16 +439,27 @@ function verPerfil(id) {
 
 // ------------------------------------------------------------
 // EP05 - US16: ver, cancelar y reprogramar citas próximas.
-// Lista todas las citas ordenadas por fecha y hora.
-// Cancelar elimina la cita del almacenamiento.
+// Lista todas las citas (Supabase) ordenadas por fecha y hora.
+// Cancelar elimina la cita de la base de datos.
 // Reprogramar muestra un aviso (flujo simulado).
 // ------------------------------------------------------------
 const panelCitas = document.getElementById("panel-citas");
 
-function mostrarCitas() {
-  const citas = obtener("citas").sort((a, b) =>
-    (a.fecha + a.hora).localeCompare(b.fecha + b.hora)
-  );
+// Trae las citas del paciente activo desde Supabase y las pinta.
+async function mostrarCitas() {
+  if (!usuarioActual) return; // aún no se resolvió la sesión
+
+  const { data: citas, error } = await db
+    .from("citas")
+    .select("*")
+    .eq("paciente_id", usuarioActual.id)
+    .order("fecha", { ascending: true })
+    .order("hora", { ascending: true });
+
+  if (error) {
+    mostrarMensaje("No se pudieron cargar tus citas: " + error.message, "error", panelCitas);
+    return;
+  }
 
   document.getElementById("sin-citas").hidden   = citas.length > 0;
   document.getElementById("citas-tabla").hidden = citas.length === 0;
@@ -446,15 +478,19 @@ function mostrarCitas() {
 }
 
 // Delegación de eventos para cancelar y reprogramar.
-panelCitas.addEventListener("click", (evento) => {
+panelCitas.addEventListener("click", async (evento) => {
   const idCancelar     = evento.target.dataset.cancelar;
   const idReprogramar  = evento.target.dataset.reprogramar;
 
-  // US16: cancelar cita — solicita confirmación y la elimina.
+  // US16: cancelar cita — solicita confirmación y la elimina en Supabase.
   if (idCancelar) {
     evento.preventDefault();
     if (confirm("¿Seguro que quieres cancelar esta cita?")) {
-      eliminar("citas", "id", Number(idCancelar));
+      const { error } = await db.from("citas").delete().eq("id", idCancelar);
+      if (error) {
+        mostrarMensaje("No se pudo cancelar la cita: " + error.message, "error", panelCitas);
+        return;
+      }
       mostrarCitas();
       mostrarMensaje("Cita cancelada", "info", panelCitas);
     }
@@ -467,7 +503,9 @@ panelCitas.addEventListener("click", (evento) => {
   }
 });
 
-mostrarCitas(); // carga inicial de la tabla
+// Nota: la carga inicial de la tabla ocurre dentro del guard de
+// sesión (más arriba), una vez que "usuarioActual" está disponible.
+
 
 // ------------------------------------------------------------
 // EP05 - US15: control de privacidad del paciente.
