@@ -441,3 +441,150 @@ footer { padding: 16px 32px; border-top: 1px solid var(--borde); background: #ff
 .panel-sub-titulo { font-size: .95rem; font-weight: 600; color: var(--texto); margin: 2px 0 4px; }
 .seccion-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .tag-mini { display: inline-block; font-size: .72rem; font-weight: 600; color: var(--texto-2); background: var(--gris-claro); border-radius: 999px; padding: 2px 9px; margin-right: 4px; }
+
+/* ============================================================
+   WIDGET MINDBOT - LLAMA 4 (CORREGIDO Y OPTIMIZADO)
+   ============================================================ */
+.mindbot-btn-flotante {
+  position: fixed;
+  bottom: 20px;
+  right: 20px; 
+  width: 50px;  
+  height: 50px;
+  border-radius: 50%;
+  background-color: #2F55E7; 
+  color: white;
+  font-size: 22px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(47, 85, 231, 0.35);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s;
+}
+
+.mindbot-btn-flotante:hover {
+  transform: scale(1.1);
+  background-color: #1d42c4;
+}
+
+.mindbot-ventana {
+  position: fixed;
+  bottom: 85px;
+  right: 20px; 
+  width: 310px; 
+  height: 400px; 
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  
+  /* CAMBIO CLAVE: Oculto por defecto mediante CSS puro */
+  display: none; 
+  
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Esta clase la controlará JavaScript para abrir y cerrar el chat con animación fluida */
+.mindbot-ventana.activo {
+  display: flex !important;
+}
+
+.mindbot-header {
+  background: #2F55E7;
+  color: white;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mindbot-perfil {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mindbot-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e; 
+  border-radius: 50%;
+}
+
+.mindbot-btn-cerrar {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.mindbot-btn-cerrar:hover { color: white; }
+
+.mindbot-mensajes-box {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mindbot-msg {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.mindbot-msg.bot {
+  background: white;
+  color: #334155;
+  align-self: flex-start;
+  border: 1px solid #e2e8f0;
+  border-top-left-radius: 2px;
+}
+
+.mindbot-msg.user {
+  background: #2F55E7;
+  color: white;
+  align-self: flex-end;
+  border-top-right-radius: 2px;
+}
+
+.mindbot-input-area {
+  display: flex;
+  padding: 10px;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+  gap: 6px;
+}
+
+.mindbot-input-area input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+}
+.mindbot-input-area input:focus { border-color: #2F55E7; }
+
+.mindbot-btn-enviar {
+  background: #2F55E7;
+  color: white;
+  border: none;
+  padding: 0 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
