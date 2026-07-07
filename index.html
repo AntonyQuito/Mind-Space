@@ -69,6 +69,30 @@
         <div class="float-badge">🎯 <b>94%</b> de compatibilidad</div>
       </div>
     </div>
+<div id="mindbot-container">
+  <button id="mindbot-toggle-btn" class="mindbot-btn-flotante" title="Consultar con MindBot">
+    🤖
+  </button>
+
+  <div id="mindbot-window" class="mindbot-ventana">
+    <div class="mindbot-header">
+      <div class="mindbot-perfil">
+        <span class="mindbot-status-dot"></span>
+        <span>MindBot (Guía Web)</span>
+      </div>
+      <button id="mindbot-close-btn" class="mindbot-btn-cerrar" title="Minimizar">✕</button>
+    </div>
+
+    <div id="chat" class="mindbot-mensajes-box">
+      <p class="mindbot-msg bot">¡Hola! Soy MindBot 🤖. Estoy aquí para guiarte por la landing page de MindSpace. Pregúntame qué herramientas tenemos para <b>Pacientes</b> o <b>Profesionales</b>.</p>
+    </div>
+
+    <form id="formChat" class="mindbot-input-area">
+      <input type="text" id="pregunta" placeholder="Escribe tu duda aquí..." autocomplete="off" required />
+      <button type="submit" class="mindbot-btn-enviar">➔</button>
+    </form>
+  </div>
+</div>
   </header>
 
   <!-- Características -->
@@ -203,5 +227,6 @@
 
   <script src="js/shared/ui.js"></script>
   <script src="js/landing.js"></script>
+  <script src="js/Asistente/Asistente.js"></script>
 </body>
 </html>
